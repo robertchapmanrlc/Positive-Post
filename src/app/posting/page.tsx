@@ -1,12 +1,15 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { postMessage } from "../actions/posting";
 
-export default function Home() {
+export default function PostMessage() {
   const { userId } = auth();
 
   if (!userId) {
     redirect("/sign-in");
   }
+
+  const postMessageWithId = postMessage.bind(null, userId);
 
   return (
     <main className="w-full py-5 flex flex-col justify-center items-center gap-y-5">
@@ -17,7 +20,7 @@ export default function Home() {
         Write something positive for someone
       </h3>
       <form
-        action=""
+        action={postMessageWithId}
         className="w-full max-w-xs sm:max-w-lg md:max-w-2xl flex flex-col gap-y-5"
       >
         <textarea
