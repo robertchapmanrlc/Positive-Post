@@ -1,4 +1,15 @@
+
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+
 export default function Home() {
+
+  const { userId } = auth();
+
+  if (!userId) {
+    redirect('/sign-in');
+  }
+
   return (
     <main className="w-full py-5 flex flex-col justify-center items-center gap-y-5">
       <h1 className="text-text text-4xl md:text-7xl text-center">Positivity Post</h1>
