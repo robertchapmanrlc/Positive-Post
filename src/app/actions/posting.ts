@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 let hf: HfInference;
 
-export async function postMessage(userId: string, formData: FormData) {
+export async function postMessage(formData: FormData) {
 
   const message = formData.get('message') as string;
 

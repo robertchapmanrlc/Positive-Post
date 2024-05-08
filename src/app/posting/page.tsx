@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { postMessage } from "../actions/posting";
+import PositivityForm from "../components/posit-form";
+
 
 export default function PostMessage() {
   const { userId } = auth();
@@ -8,8 +9,6 @@ export default function PostMessage() {
   if (!userId) {
     redirect("/sign-in");
   }
-
-  const postMessageWithId = postMessage.bind(null, userId);
 
   return (
     <main className="w-full py-5 flex flex-col justify-center items-center gap-y-5">
@@ -19,10 +18,7 @@ export default function PostMessage() {
       <h3 className="text-text text-sm sm:text-lg md:text-xl lg:text-2xl text-center">
         Write something positive for someone
       </h3>
-      <form
-        action={postMessageWithId}
-        className="w-full max-w-xs sm:max-w-lg md:max-w-2xl flex flex-col gap-y-5"
-      >
+      <PositivityForm>
         <textarea
           name="message"
           className="h-52 p-4 text-text placeholder:text-text/40 rounded-lg bg-secondary focus:outline-accent"
@@ -36,7 +32,7 @@ export default function PostMessage() {
         >
           Submit
         </button>
-      </form>
+      </PositivityForm>
     </main>
   );
 }
