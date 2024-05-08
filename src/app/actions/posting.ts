@@ -1,6 +1,6 @@
 "use server";
 
-import { HfInference } from "@huggingface/inference";
+import { HfInference, TextClassificationOutput } from "@huggingface/inference";
 
 import { redirect } from "next/navigation";
 
@@ -10,7 +10,15 @@ export async function postMessage(formData: FormData) {
 
   const message = formData.get('message') as string;
 
-  const inferenceResponse = await runHfInference(message);
+  const inferenceResponse: TextClassificationOutput = await runHfInference(message);
+
+  const isPositive = positiveEnough(inferenceResponse);
+
+  if (!isPositive) {
+    return {
+      error: 'Try a more positive message'
+    }
+  }
 
   redirect('/message');
 }
@@ -27,4 +35,8 @@ async function runHfInference(input: string) {
   });
 
   return inferenceResult;
+}
+
+function positiveEnough(output: TextClassificationOutput) {
+  return output[0].label === 'POS' && output[0].score >= 0.75;
 }
