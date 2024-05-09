@@ -1,12 +1,21 @@
 "use server";
 
+import { redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
 import { HfInference, TextClassificationOutput } from "@huggingface/inference";
 
-import { redirect } from "next/navigation";
+import db from "../../../db/drizzle";
+import { posts } from "../../../db/schema";
 
 let hf: HfInference;
 
 export async function postMessage(formData: FormData) {
+
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error('Unauthorized');
+  }
 
   const message = formData.get('message') as string;
 
@@ -19,6 +28,8 @@ export async function postMessage(formData: FormData) {
       error: 'Try a more positive message'
     }
   }
+
+  await db.insert(posts).values({ userId: userId, message: message });
 
   redirect('/message');
 }

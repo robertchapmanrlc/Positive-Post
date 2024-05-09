@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import getMessage from "../actions/getMessage";
+import { getMessage } from "../actions/getMessage";
 
 export default async function PositiveMessage() {
   const { userId } = auth();
@@ -9,7 +9,7 @@ export default async function PositiveMessage() {
     redirect("/sign-in");
   }
 
-  const message = await getMessage(userId);
+  const message = await getMessage();
 
   return (
     <main className="w-full py-5 flex flex-col justify-center items-center gap-y-5">
