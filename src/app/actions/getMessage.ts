@@ -2,11 +2,22 @@
 
 import { auth } from "@clerk/nextjs/server";
 import db from "../../../db/drizzle";
-import { eq } from "drizzle-orm";
+import { eq, ne } from "drizzle-orm";
 import { posts } from "../../../db/schema";
 
 export async function getMessage() {
-  return "You're super awesome.";
+
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  const post = await db.query.posts.findFirst({
+    where: ne(posts.userId, userId),
+  });
+
+  return post?.message;
 }
 
 export async function alreadyPosted() {
