@@ -3,7 +3,8 @@
         "deploymentEnabled": {
             "layout": false,
             "auth": false,
-            "posting": false
+            "posting": false,
+            "database": false
         }
     }
 }
