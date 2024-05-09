@@ -1,13 +1,19 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import PositivityForm from "../components/posit-form";
+import { alreadyPosted } from "../actions/getMessage";
 
 
-export default function PostMessage() {
+export default async function PostMessage() {
   const { userId } = auth();
 
   if (!userId) {
     redirect("/sign-in");
+  }
+
+  const posted = await alreadyPosted();
+  if (posted) {
+    redirect('/message');
   }
 
   return (
