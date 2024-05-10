@@ -1,7 +1,10 @@
 {
     "git": {
         "deploymentEnabled": {
-            "layout": false
+            "layout": false,
+            "auth": false,
+            "posting": false,
+            "database": false
         }
     }
 }
