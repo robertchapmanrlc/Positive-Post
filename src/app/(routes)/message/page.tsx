@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { getMessage } from "../actions/getMessage";
+import { getMessage } from "../../actions/getMessage";
 
 export default async function PositiveMessage() {
   const { userId } = auth();
