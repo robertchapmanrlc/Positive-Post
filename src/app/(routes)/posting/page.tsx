@@ -1,8 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import PositivityForm from "../components/posit-form";
-import { alreadyPosted } from "../actions/getMessage";
-
+import PositivityForm from "@/components/posit-form";
+import { alreadyPosted } from "@/actions/getMessage";
 
 export default async function PostMessage() {
   const { userId } = auth();

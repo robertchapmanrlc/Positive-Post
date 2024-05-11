@@ -2,7 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server";
 import db from "../../../db/drizzle";
-import { eq, ne } from "drizzle-orm";
+import { eq, ne, desc } from "drizzle-orm";
 import { posts } from "../../../db/schema";
 
 export async function getMessage() {
@@ -27,16 +27,18 @@ export async function alreadyPosted() {
     throw new Error("Unauthorized");
   }
 
-  const post = await db.query.posts.findFirst({
+  const userPosts = await db.query.posts.findMany({
     where: eq(posts.userId, userId),
+    orderBy: desc(posts.createdAt),
+    limit: 1
   });
 
-  if (!post) {
+  if (!userPosts) {
     return false;
   }
 
   const date = new Date().getDate();
-  const createdDate = new Date(post.createdAt).getDate();
+  const createdDate = new Date(userPosts[0].createdAt).getDate();
 
   return date === createdDate;
   
