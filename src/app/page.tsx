@@ -1,6 +1,7 @@
 import { SignInButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import MessageColumns from "./components/messageColumns";
 
 export default function Home() {
   const { userId } = auth();
@@ -17,6 +18,7 @@ export default function Home() {
       <h3 className="text-text text-sm sm:text-lg md:text-xl lg:text-2xl text-center">
         Positiviy can go a long way.
       </h3>
+      <MessageColumns />
       <SignInButton
         forceRedirectUrl="/voting"
         signUpFallbackRedirectUrl="/voting"
