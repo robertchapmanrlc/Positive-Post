@@ -11,7 +11,7 @@ export default function Home() {
   }
 
   return (
-    <main className="w-full py-5 flex flex-col justify-center items-center gap-y-5">
+    <main className="w-full py-5 flex flex-col justify-center items-center gap-y-5 md:gap-y-10">
       <h1 className="text-text text-4xl md:text-7xl text-center">
         Positivity Post
       </h1>
