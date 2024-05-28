@@ -2,22 +2,47 @@
 
 import { auth } from "@clerk/nextjs/server";
 import db from "../../../db/drizzle";
-import { eq, ne, desc } from "drizzle-orm";
-import { posts } from "../../../db/schema";
+import { eq, ne, desc, and, gte, sql } from "drizzle-orm";
+import { daily_activities, posts } from "../../../db/schema";
+import { redirect } from "next/navigation";
 
 export async function getMessage() {
-
   const { userId } = auth();
 
   if (!userId) {
     throw new Error("Unauthorized");
   }
 
-  const post = await db.query.posts.findFirst({
-    where: ne(posts.userId, userId),
-  });
+  const now = new Date();
+  const startOfToday = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
 
-  return post?.message;
+  const userActivity = await db
+    .select()
+    .from(daily_activities)
+    .where(
+      and(
+        eq(daily_activities.userId, userId),
+        gte(daily_activities.last_sent_at, startOfToday)
+      )
+    )
+    .limit(1);
+
+  if (!userActivity || userActivity.length === 0) {
+    redirect('/posting');
+  }
+
+  const post = await db
+    .select({ message: posts.message })
+    .from(posts)
+    .where(ne(posts.userId, userId))
+    .orderBy(sql`random()`)
+    .limit(1);
+
+  return post[0].message;
 }
 
 export async function alreadyPosted() {
@@ -27,19 +52,23 @@ export async function alreadyPosted() {
     throw new Error("Unauthorized");
   }
 
-  const userPosts = await db.query.posts.findMany({
-    where: eq(posts.userId, userId),
-    orderBy: desc(posts.createdAt),
-    limit: 1
-  });
+  const now = new Date();
+  const startOfToday = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
 
-  if (!userPosts) {
-    return false;
-  }
+  const userActivity = await db
+    .select()
+    .from(daily_activities)
+    .where(
+      and(
+        eq(daily_activities.userId, userId),
+        gte(daily_activities.last_sent_at, startOfToday)
+      )
+    )
+    .limit(1);
 
-  const date = new Date().getDate();
-  const createdDate = new Date(userPosts[0].createdAt).getDate();
-
-  return date === createdDate;
-  
+  return userActivity.length === 1;
 }

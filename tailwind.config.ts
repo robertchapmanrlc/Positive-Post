@@ -14,8 +14,28 @@ const config: Config = {
         primary: "#90f587",
         hover: "#50e543",
         active: "#1baa0f",
+        disabled: "#186912",
         secondary: "#46584c",
         accent: "#32efde",
+      },
+      keyframes: {
+        "fade-in": {
+          from: {
+            opacity: "0",
+          },
+          to: {
+            opacity: "1",
+          },
+        },
+        marquee: {
+          "100%": {
+            transform: "translateY(-50%)",
+          },
+        },
+      },
+      animation: {
+        marquee: "marquee var(--marquee-duration) linear infinite",
+        "fade-in": "fade-in 0.5s linear forwards",
       },
     },
   },
