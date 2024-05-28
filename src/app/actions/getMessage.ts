@@ -52,18 +52,23 @@ export async function alreadyPosted() {
     throw new Error("Unauthorized");
   }
 
-  const userPosts = await db.query.posts.findMany({
-    where: eq(posts.userId, userId),
-    orderBy: desc(posts.createdAt),
-    limit: 1,
-  });
+  const now = new Date();
+  const startOfToday = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
 
-  if (!userPosts) {
-    return false;
-  }
+  const userActivity = await db
+    .select()
+    .from(daily_activities)
+    .where(
+      and(
+        eq(daily_activities.userId, userId),
+        gte(daily_activities.last_sent_at, startOfToday)
+      )
+    )
+    .limit(1);
 
-  const date = new Date().getDate();
-  const createdDate = new Date(userPosts[0].createdAt).getDate();
-
-  return date === createdDate;
+  return userActivity.length === 1;
 }
