@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import PositivityForm from "@/components/posit-form";
 import { alreadyPosted } from "@/actions/getMessage";
+import SubmitButton from "@/components/submitButton";
 
 export default async function PostMessage() {
   const { userId } = auth();
@@ -31,12 +32,7 @@ export default async function PostMessage() {
           required
           placeholder="Your message"
         />
-        <button
-          type="submit"
-          className="py-2 px-3 text-background bg-primary hover:bg-hover active:bg-active rounded-md"
-        >
-          Submit
-        </button>
+        <SubmitButton />
       </PositivityForm>
     </main>
   );
