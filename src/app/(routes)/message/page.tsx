@@ -19,7 +19,7 @@ export default async function PositiveMessage() {
         Here&apos;s one for you.
       </h3>
       <h5 className="text-text text-center text-lg">
-        Be sure to come back to send another one.
+        Be sure to come back tomorrow to send another one.
       </h5>
       <section className="w-full max-h-80 p-3 rounded-md bg-primary max-w-xs sm:max-w-lg md:max-w-2xl">
         <p className="text-background text-left">{message}</p>

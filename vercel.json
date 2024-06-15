@@ -4,7 +4,9 @@
             "layout": false,
             "auth": false,
             "posting": false,
-            "database": false
+            "database": false,
+            "analytics": false,
+            "update": false
         }
     }
 }
